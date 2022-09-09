@@ -29,6 +29,12 @@ The code blocks (in black) on this page show the required commands (the text aft
 
 ## Installing OCaml
 
+The **platform installer** is currently in active development. It will
+automatically install opam, OCaml, and the development tools. [See below](#up-and-running-with-the-platform-installer)
+for the instruction.
+
+Please note that the installer is a work in progress and might not work on your system.
+
 OCaml is available as a package in most Linux distributions; however, it is
 often outdated. On the contrary, OCaml's official package manager, opam, allows you to
 easily switch between OCaml versions and much more. This is
@@ -38,6 +44,8 @@ OCaml.
 The best way to install OCaml is with opam, OCaml's package manager.
 
 ### Installing opam
+
+Alternatively, you can use the alpha-version platform installer to install opam and the development tools, [see below](#up-and-running-with-the-platform-installer).
 
 [opam](https://opam.ocaml.org/), the package manager of OCaml, introduces the concept of "switches," consisting of a compiler together with a set of packages (libraries and other files). Switches are used to have independent sets of dependencies in different projects.
 
@@ -92,6 +100,8 @@ $ bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/ocaml/opam/master/s
 
 It's essential to initialise opam, which will (if needed) install the OCaml compiler. If you already have OCaml installed, opam will use that compiler.  
 
+This step is done automatically by the alpha-version platform installer, [see below](#up-and-running-with-the-platform-installer).
+
 If you have installed the binary distribution of opam through the install script, this step should already be done. If you have installed it through your system package manager, you must initialise opam by running the following command. This method will fetch and initialise the latest version of opam, directly from the official servers:
 
 ```shell
@@ -106,7 +116,6 @@ The second command (`eval $(opam env)`) modifies a few environment variables to 
 **Please note:** At the end of the `opam init`, you are asked if you want to add a hook to your shell to best integrate with your system. Indeed, in order for the shell to be aware of the tools available in the current opam switch, a few environment variables need to be modified. For instance, the `PATH` variable has to be expanded so that typing `ocaml` in the shell runs the OCaml binary _of the current switch_. Answering `y` will provide a better user experience.
 
 Now check the installation by running `opam --version`. You can compare it with the current version on [opam.ocaml.org](https://opam.ocaml.org/). 
-
 
 ### Creating a New Switch 
 
@@ -131,7 +140,6 @@ We will learn about the OCaml top-level and other installed tools in the next se
 
 In case you are not satisfied with the OCaml version of your system switch, you can change the version with `opam switch create <version_here>`. More information can be found on the [official website](https://opam.ocaml.org/).
 
-
 ### The OCaml Base Tools
 
 OCaml is installed in an opam switch, which, among others, brings the following
@@ -146,6 +154,8 @@ programs:
 Although this is theoretically all we need to write OCaml code, it is not a complete and comfortable development environment.
 
 ## Setting Up Development Tools
+
+This step is done automatically by the alpha-version platform installer, [see below](#up-and-running-with-the-platform-installer).
 
 We will now install everything we need to get a complete development environment, which includes:
 
@@ -163,6 +173,41 @@ $ opam install dune merlin ocaml-lsp-server odoc ocamlformat utop dune-release
 ```
 
 Now that the tools are installed, it remains to understand how to use them. Most of them will be driven either by the editor or by Dune, but UTop is handy to try OCaml or a specific library.
+
+## Up and Running with the Platform Installer
+
+A different way to install opam and the OCaml Platform is with the platform installer, which is a work in progress. You can follow its development and
+report issues on [the repository](https://github.com/tarides/ocaml-platform-installer/).
+
+Please note that the installer might not work on your system. If that's the
+case, follow the old instructions above, which are still relevant.
+
+The installer is not in any package manager yet, but it can be installed using
+this script, which will install both opam and OCaml Platform`:
+
+```shell
+$ sudo bash < <(curl -sL https://github.com/tarides/ocaml-platform-installer/releases/latest/download/installer.sh)
+```
+
+This downloads a script from the web and executes it as root. You are
+encouraged to have a look at what it does first.
+
+Once this step is done, setup the environment with:
+
+```shell
+$ ocaml-platform
+```
+
+This will initialise opam and install the development tools, which might take
+some time.
+
+The tools are not installed exactly the same way as with `opam install`. They
+are built in a sandbox so that each tool's dependencies are not installed in
+the same space as your project's dependencies, see [Under the Hood](https://github.com/tarides/ocaml-platform-installer#whats-under-the-hood=)
+for more information.
+
+`ocaml-platform` can be run again at any time to install the tools in another
+opam switch for example.
 
 ## Using the OCaml Toplevel with UTop
 
